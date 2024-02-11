@@ -3,6 +3,7 @@ import React from 'react'
 import {Card, CardHeader, CardBody, Image, CardFooter} from "@nextui-org/react";
 import HeaderText from './HeaderText';
 import SocialIcons from './SocialIcons';
+import BackButton from './BackButton';
 
 
 const BoxWrapper = ({ children, headerLabel, backButtonLabel, backButtonHref, showSocial }) => {
@@ -19,6 +20,12 @@ const BoxWrapper = ({ children, headerLabel, backButtonLabel, backButtonHref, sh
                 <SocialIcons />
             </CardFooter>
         )}
+        <CardFooter>
+            <BackButton
+            label={backButtonLabel}
+            href={backButtonHref}
+            />
+        </CardFooter>
     </Card>
   )
 }
