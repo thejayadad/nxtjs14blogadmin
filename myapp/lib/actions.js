@@ -1,18 +1,34 @@
 'use server'
 import bcrypt from "bcryptjs";
 import  db from "@/lib/db"
+import { signIn } from "@/auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { AuthError } from "next-auth";
 
 export const login = async (values) => {
     try {
-        // Here, you can directly use the values without validation
-        // For example, you might perform authentication logic here
-        console.log("values " + values)
-        // After performing authentication logic, return success response
+
+        const {email, password} = values;
+        await signIn("credentials", {
+            email,
+            password,
+            redirectTo: DEFAULT_LOGIN_REDIRECT
+        })
         return { success: "Email Sent" };
     } catch (error) {
-        // If any error occurs during authentication, return error response
-        return { error: "An error occurred while processing your request." };
-    }
+        if (error instanceof AuthError) {
+            switch (error.type) {
+              case "CredentialsSignin":
+                return { error: "Invalid credentials!" }
+              default:
+                return { error: "Something went wrong!" }
+            }
+          }
+      
+          throw error;
+        }
+      
+    
 }
 export const registerUser = async (values) => {
     try {
