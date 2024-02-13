@@ -19,3 +19,10 @@ export const RegisterSchema = z.object({
         message: "Name Required"
     }),
 })
+
+export const SettingsSchema = z.object({
+    name: z.optional(z.string()),
+    // role: z.enum([UserRole.ADMIN, UserRole.USER]),
+    email: z.optional(z.string().email()),
+    password: z.optional(z.string().min(6)),
+})

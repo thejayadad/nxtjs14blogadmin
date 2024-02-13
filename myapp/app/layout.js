@@ -1,6 +1,10 @@
+// RootLayout.js
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { NextThemeProvider } from "@/lib/NextThemeProvider";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth";
+import React from 'react';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,13 +14,17 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const session = auth(); // Ensure auth function returns the session properly
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NextThemeProvider>
-        {children}
-        </NextThemeProvider>
-        </body>
+        <SessionProvider session={session}>
+          <NextThemeProvider>
+            {children}
+          </NextThemeProvider>
+        </SessionProvider>
+      </body>
     </html>
   );
 }

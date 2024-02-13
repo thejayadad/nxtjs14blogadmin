@@ -4,6 +4,12 @@ import  db from "@/lib/db"
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
+import { signOut } from "@/auth";
+import { SettingsSchema } from "./schemas";
+import { getUserById } from "./user";
+import { useCurrentUser } from "./useCurrentUser";
+import { getSession } from "next-auth/react";
+
 
 export const login = async (values) => {
     try {
@@ -53,3 +59,29 @@ export const registerUser = async (values) => {
         return { error: "An error occurred while processing your request." };
     }
 }
+
+
+export const logout = async () => {
+    await signOut();
+  };
+
+//SETTINGS PAGE
+
+export const settings = async (userId, values) => {
+    try {
+      const dbUser = await getUserById(userId);
+      if (!dbUser) {
+        return { error: "Unauthorized" };
+      }
+      const updatedUser = await db.user.update({
+        where: { id: userId },
+        data: {
+          ...values,
+        },
+      });
+      return { success: "User information updated successfully", updatedUser };
+    } catch (error) {
+      return { error: "An error occurred while processing your request." };
+    }
+  };
+
